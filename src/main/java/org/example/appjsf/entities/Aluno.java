@@ -18,6 +18,9 @@ public class Aluno implements Serializable {
 
     private int idade;
 
+
+    private String telefone;
+
     public Long getId() {
         return id;
     }
@@ -49,4 +52,8 @@ public class Aluno implements Serializable {
     public void setIdade(int idade) {
         this.idade = idade;
     }
+
+    public String getTelefone() { return telefone;}
+
+    public void setTelefone(String telefone) { this.telefone = telefone;}
 }

@@ -1,0 +1,26 @@
+h1 {
+    font-family: -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+#name input[readonly] {
+    background-color: #C0C0C0;
+}
+
+.ui-menubar-options {
+    float: left !important;
+}
+
+.ui-menuitem {
+    float: right !important;
+}
+
+
+
+@media (min-width: 768px) {
+    .button-37 {
+        padding: 10px 30px;
+    }
+}

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Assistidos</title>
+
+</h:head>
+
+
+<h:body>
+    <h:outputScript library="js" name="closeDialog.js"/>
+    <p:menubar hideDelay="1000" immediate="true">
+
+        <f:facet name="options">
+            <p:graphicImage styleClass="logoMenu" name="/imagens/logo-portal-defensoria.png"/>
+        </f:facet>
+
+        <p:menuitem value="Administração" process="@this" action="/primeirapagina"
+                    rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>
+        <p:menuitem value="Lançamentos" process="@this" action="/lancamentos"/>
+        <p:menuitem value="Alunos" process="@this" action="/aluno/create"/>
+        <p:menuitem value="Atendimentos" process="@this" action="/atendimento/atendimentocreate"/>
+        <p:menuitem value="Trocar usuário" process="@this" action="/index"/>
+
+    </p:menubar>
+    <h:outputStylesheet library="css" name="headerStyle.css"/>
+    <h1>Cadastro de Assistidos</h1>
+    <br/>
+
+    <p:messages id="messages" showDetail="true" closable="true">
+        <p:autoUpdate/>
+    </p:messages>
+
+    <h:form id="formAssistidos">
+        <p:confirmDialog global="true" showEffect="fade" responsive="true" width="350">
+            <p:commandButton value="Sim" type="button"
+                             styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="Não" type="button"
+                             styleClass="ui-confirmdialog-no ui-button-flat"/>
+        </p:confirmDialog>
+
+        <p:panelGrid columns="2">
+            <p:outputLabel value="ID: "/>
+            <p:inputText value="#{assistidoBean.assistido.id}" disabled="true"/>
+
+            <p:outputLabel value="Nome: "/>
+            <p:inputText value="#{assistidoBean.assistido.nome}">
+                <f:validator validatorId="campoValidator"/>
+                <f:attribute name="tipoValidacao" value="nome"/>
+            </p:inputText>
+
+            <p:outputLabel value="CPF: "/>
+            <p:inputMask value="#{assistidoBean.assistido.cpf}" mask="999.999.999-99" placeholder="___.___.___-__">
+                <f:validator validatorId="campoValidator"/>
+                <f:attribute name="tipoValidacao" value="cpf"/>
+            </p:inputMask>
+
+            <p:outputLabel for="telefone" value="Telefone: "/>
+            <p:inputMask id="telefone" value="#{assistidoBean.assistido.telefone}" mask="(99) 99999-9999"
+                         placeholder="(__) _____-____">
+                <f:validator validatorId="campoValidator"/>
+                <f:attribute name="tipoValidacao" value="telefone"/>
+            </p:inputMask>
+
+            <p:outputLabel value="Sexo: "/>
+            <p:selectOneMenu id="sexo" value="#{assistidoBean.assistido.sexo}">
+                <f:selectItem itemValue="" itemLabel="[--Selecione--]" noSelectionOption="true"/>
+                <f:selectItems value="#{assistidoBean.sexos()}" var="s"
+                               itemValue="#{s.value}"
+                               itemLabel="#{s.descricao}"/>
+                <f:validator validatorId="campoValidator"/>
+                <f:attribute name="tipoValidacao" value="sexo"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="Requer atenção dobrada: "/>
+            <p:selectBooleanCheckbox value="#{assistidoBean.assistido.atencao}"/>
+
+        </p:panelGrid>
+        <br/>
+
+        <h:column>
+            <h:outputLabel/>
+            <h:panelGroup rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
+
+                <p:commandButton value="Novo" action="#{assistidoBean.novo()}"
+                                 update="formAssistidos lista_assistidos"
+                                 style="background-color: #13aa52;border-color: #13aa52"
+                                 icon="pi pi-plus" id="botaoNovo" title="Novo"/>
+
+                <p:commandButton icon="pi pi-save" value="Salvar"
+                                 action="#{assistidoBean.salvar()}"
+                                 style="margin-left:1cm"
+                                 update="formAssistidos lista_assistidos"
+                                 title="Salvar" styleClass="button-37"
+                                 validateClient="true" ajax="false"/>
+
+                <p:commandButton action="#{assistidoBean.limparFormulario()}"
+                                 value="Limpar" title="Limpar" immediate="true"
+                                 style="background-color: goldenrod;border-color: goldenrod;margin-left:1cm"
+                                 icon="pi pi-refresh" id="botaoLimpar"
+                                 update="formAssistidos lista_assistidos"
+                />
+            </h:panelGroup>
+        </h:column>
+
+    </h:form>
+
+    <br/>
+    <br/>
+
+    <h:form id="formBusca">
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:inputText id="termoPesquisa" value="#{assistidoBean.termoPesquisa}" size="30"
+                             placeholder="Digite o nome do assistido..."/>
+                <p:commandButton process="@this, termoPesquisa"
+                                 value="Pesquisar"
+                                 update="lista_assistidos" icon="pi pi-search"
+                                 title="Pesquisar" action="#{assistidoBean.pesquisar()}"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+
+
+    <p:dataTable id="lista_assistidos" widgetVar="lista_assistidos" value="#{assistidoBean.assistidos}" var="l"
+                 rows="10" paginatorPosition="bottom" paginator="true"
+                 emptyMessage="Nenhuma informação a ser exibida." border="3">
+        <f:facet name="header">Lista de Assistidos</f:facet>
+
+        <p:column sortBy="#{l.id}" headerText="#ID">
+            <h:outputLabel value="#{l.id}"/>
+        </p:column>
+
+        <p:column sortBy="#{l.nome}" headerText="Nome">
+            <h:outputLabel value="#{l.nome}"/>
+        </p:column>
+
+        <p:column headerText="CPF">
+            <h:outputLabel value="#{l.cpf}"/>
+        </p:column>
+
+        <p:column headerText="Sexo">
+            <h:outputLabel value="#{l.sexo}"/>
+        </p:column>
+
+        <p:column headerText="Telefone">
+            <h:outputLabel value="#{l.telefone}"/>
+        </p:column>
+
+        <p:column headerText="Requer atenção dobrada?">
+            <p:badge value="#{l.atencao ? 'Sim ' : 'Não '}" severity="#{l.atencao ? 'success' : 'danger'}"
+                     styleClass="mr-2"/>
+        </p:column>
+
+        <p:column>
+            <f:facet name="header">Ações</f:facet>
+            <p:commandLink process="@this" title="Editar" update="formAssistidos lista_assistidos">
+                <f:setPropertyActionListener value="#{l}" target="#{assistidoBean.assistido}"/>
+                <i class="pi pi-pencil"/>
+            </p:commandLink>
+            &nbsp;
+            <p:commandLink title="Remover" action="#{assistidoBean.remover()}" process="@this"
+                           update="formAssistidos lista_assistidos">
+                <f:setPropertyActionListener value="#{l}" target="#{assistidoBean.assistido}"/>
+                <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+                           message="Deseja mesmo excluir o assistido?"/>
+                <i class="pi pi-trash"/>
+            </p:commandLink>
+        </p:column>
+
+
+        <p:column headerText="Novo atedimento">
+            <p:commandButton
+                    value="Atendimento"
+                    icon="pi pi-plus"
+                    process="@this"
+                    update=":formAtendimentos"
+                    oncomplete="PF('atendimentoDialogWidgetVar').show()">
+                <f:setPropertyActionListener value="#{l}" target="#{assistidoBean.assistido}"/>
+            </p:commandButton>
+        </p:column>
+    </p:dataTable>
+
+
+    <p:dialog header="Novo atendimento" widgetVar="atendimentoDialogWidgetVar" id="dialogAddAtendimento"
+              showEffect="fade"
+              modal="true" resizable="false" closeOnEscape="true" draggable="false" dismissableMask="true"
+              appendTo="@(body)">
+
+        <p:messages id="messagesAtendimento" showDetail="true" closable="true">
+            <p:autoUpdate/>
+        </p:messages>
+
+        <h:form id="formAtendimentos">
+
+            <p:panelGrid columns="2">
+
+                <p:outputLabel value="Assistido: "/>
+                <p:inputText value="#{assistidoBean.assistido.nome}" disabled="true"
+                             placeholder="#{assistidoBean.assistido.nome}"/>
+
+                <p:outputLabel value="Data: "/>
+                <p:datePicker id="data" pattern="dd/MM/yyyy"
+                              placeholder="Selecione uma data"
+                              value="#{assistidoBean.atendimento.data}">
+                    <f:validator validatorId="campoValidator"/>
+                    <f:attribute name="tipoValidacao" value="data"/>
+                </p:datePicker>
+
+                <p:outputLabel value="Situação: "/>
+                <p:selectOneMenu id="situacao" value="#{assistidoBean.atendimento.situacao}">
+                    <f:selectItem itemValue="" itemLabel="[--Selecione--]" noSelectionOption="true"/>
+                    <f:selectItems value="#{atendimentoBean.estados()}" var="s" itemValue="#{s}" />
+                    <f:validator validatorId="campoValidator"/>
+                    <f:attribute name="tipoValidacao" value="situacao"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="Atendente: "/>
+                <p:inputText id="atendente" value="#{assistidoBean.atendimento.atendente}">
+                    <f:validator validatorId="campoValidator"/>
+                    <f:attribute name="tipoValidacao" value="atendente"/>
+                </p:inputText>
+
+            </p:panelGrid>
+            <br/>
+            <p:commandButton
+                    value="Criar"
+                    action="#{assistidoBean.salvarAtendimento()}"
+                    update="formAtendimentos"
+                    oncomplete="if (args.CampoValidator) {PF('atendimentoDialogWidgetVar').hide()}"
+                    style="background-color: #13aa52;border-color: #13aa52;"
+                    icon="pi pi-plus"/>
+            <p:commandButton
+                    value="Cancelar"
+                    action="#{assistidoBean.limparFormularioAtendimento()}"
+                    update="formAtendimentos"
+                    oncomplete="PF('atendimentoDialogWidgetVar').hide()"
+                    style="background-color: red;border-color: red;
+                    margin-left:1cm; float: right"
+                    icon="pi pi-times"/>
+        </h:form>
+    </p:dialog>
+
+</h:body>
+
+</html>

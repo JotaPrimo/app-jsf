@@ -12,16 +12,20 @@
 
 <h:body>
     <h:form id="formMenu">
-        <h:commandLink value="Administração" action="lancamentos"
+        <h:commandLink value="Administração" action="/primeirapagina"
                        style="margin-left:1cm;" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}" />
-        <h:commandLink value="Lançamentos" action="primeirapagina"
+        <h:commandLink value="Lançamentos" action="/lancamentos"
                        style="margin-left:1cm;" />
-        <h:commandLink value="Trocar usuário" action="index"
+        <h:commandLink value="Assistido" action="/assistido/assistidocreate"
+                       style="margin-left:1cm;" />
+        <h:commandLink value="Atendimentos" action="/atendimento/atendimentocreate" style="margin-left:1cm;" />
+        <h:commandLink value="Trocar usuário" action="/index"
                        style="margin-left:1cm;" />
     </h:form>
 
     <h1>Lançamentos</h1>
 
+    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
     <h:form id="formAluno"
             style="margin-top:10%; margin-left:40%;    margin-right: 40%;">
         <h:panelGrid columns="2">
@@ -33,13 +37,17 @@
             <h:inputText value="#{alunoBean.aluno.id}" readonly="true" />
 
             <h:outputLabel value="Nome:" />
-            <h:inputText value="#{alunoBean.aluno.nome}" />
+            <h:inputText value="#{alunoBean.aluno.nome}" >
+            </h:inputText>
 
             <h:outputLabel value="Email" />
             <h:inputText value="#{alunoBean.aluno.email}" />
 
             <h:outputLabel value="Idade" />
             <h:inputText value="#{alunoBean.aluno.idade}" />
+
+            <h:outputLabel value="Telefone" />
+            <h:inputText value="#{alunoBean.aluno.telefone}" />
 
             <h:column>
                 <h:outputLabel />
@@ -70,18 +78,23 @@
             </h:column>
 
             <h:column>
-                <f:facet name="header">Nº Nota Fiscal</f:facet>
+                <f:facet name="header">Idade</f:facet>
                 <h:outputLabel value="#{l.idade}" />
             </h:column>
 
             <h:column>
-                <f:facet name="header">Empresa Origem</f:facet>
+                <f:facet name="header">Nome</f:facet>
                 <h:outputLabel value="#{l.nome}" />
             </h:column>
 
             <h:column>
-                <f:facet name="header">Empresa Destino</f:facet>
+                <f:facet name="header">E-mail</f:facet>
                 <h:outputLabel value="#{l.email}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Telefone</f:facet>
+                <h:outputLabel value="#{l.telefone}" />
             </h:column>
 
             <h:column>
@@ -94,7 +107,7 @@
 
             <h:column rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
                 <f:facet name="header">Remover</f:facet>
-                <h:commandLink title="Remover" action="#{alunoBean.remover()}">
+                <h:commandLink title="Remover" action="#{alunoBean.remover()}" immediate="true">
                     <h:graphicImage value="/resources/imagens/deletar.png" width="30px" height="30px" />
                     <f:setPropertyActionListener value="#{l}" target="#{alunoBean.aluno}" />
                 </h:commandLink>

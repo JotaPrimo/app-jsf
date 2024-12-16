@@ -148,6 +148,7 @@ public class PessoaBean implements Serializable {
 
     public String novo() {
         pessoa = new Pessoa();
+
         return "";
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import org.example.appjsf.jpautil.JPAUtil;
 
@@ -54,6 +55,21 @@ public class DaoGeneric<E> implements Serializable {
                 .executeUpdate();
 
         entityTransaction.commit();
+    }
+
+    public List<E> pesquisarPorAtributo(Class<E> entidade, String attributeName, String attributeValue) {
+        EntityManager entityManager = JPAUtil.getEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+
+        // Monta a query usando o nome da entidade e o atributo
+        String jpql = "from " + entidade.getName() + " where " + attributeName + " like :value";
+        TypedQuery<E> query = entityManager.createQuery(jpql, entidade);
+        query.setParameter("value", attributeValue + "%");
+
+        List<E> resultado = query.getResultList();
+        entityTransaction.commit();
+        return resultado;
     }
 
     public List<E> getListEntity(Class<E> entidade) {

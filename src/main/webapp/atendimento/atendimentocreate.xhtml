@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Atendimentos</title>
+
+</h:head>
+
+<h:body>
+
+    <p:menubar immediate="true">
+
+        <f:facet name="options" >
+            <p:graphicImage styleClass="logoMenu" name="/imagens/logo-portal-defensoria.png"/>
+        </f:facet>
+
+        <p:menuitem value="Administração" process="@this" action="/primeirapagina"
+                    rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>
+        <p:menuitem value="Lançamentos" process="@this" action="/lancamentos"/>
+        <p:menuitem value="Alunos" process="@this" action="/aluno/create"/>
+        <p:menuitem value="Assistidos" process="@this" action="/assistido/assistidocreate"/>
+        <p:menuitem value="Trocar usuário" process="@this" action="/index"/>
+
+    </p:menubar>
+    <h:outputStylesheet library="css" name="headerStyle.css"/>
+    <h1>Cadastro de Atendimentos</h1>
+    <br/>
+
+    <p:messages id="messages" showDetail="true" closable="true">
+        <p:autoUpdate/>
+    </p:messages>
+
+    <h:form id="formAtendimentos">
+        <p:confirmDialog global="true" showEffect="fade" responsive="true" width="350">
+            <p:commandButton value="Sim" type="button"
+                             styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="Não" type="button"
+                             styleClass="ui-confirmdialog-no ui-button-flat"/>
+        </p:confirmDialog>
+
+        <p:panelGrid columns="2">
+            <p:outputLabel value="Código: "/>
+            <p:inputText value="#{atendimentoBean.atendimento.codigo}" disabled="true"/>
+
+            <p:outputLabel value="Assistido: "/>
+            <p:inputText value="#{atendimentoBean.atendimento.assistido}">
+            </p:inputText>
+
+            <p:outputLabel value="Data: "/>
+            <p:datePicker id="data" pattern="dd/MM/yyyy"
+                          placeholder="Selecione uma data"
+                          value="#{atendimentoBean.atendimento.assistido}"/>
+
+            <p:outputLabel value="Situação: "/>
+            <p:selectOneMenu id="situacao" value="#{atendimentoBean.atendimento.situacao}">
+                <f:selectItem itemValue="" itemLabel="[--Selecione--]" noSelectionOption="true"/>
+                <f:selectItems value="#{atendimentoBean.estados()}" var="s"
+                               itemValue="#{s.value}"
+                               itemLabel="#{s.descricao}"/>
+            </p:selectOneMenu>
+
+
+
+        </p:panelGrid>
+        <br/>
+
+
+    </h:form>
+
+
+</h:body>
+
+</html>
