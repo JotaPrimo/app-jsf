@@ -22,6 +22,10 @@ public class AssistidoService {
         return daoGeneric.pesquisarPorAtributo(assistidoClass, nome, termoPesquisa);
     }
 
+    public Assistido pesquisar(Class<Assistido> assistidoClass, String termoPesquisa) {
+        return daoGeneric.consultar(assistidoClass, termoPesquisa);
+    }
+
     public void merge(Assistido assistido) {
         daoGeneric.merge(assistido);
     }

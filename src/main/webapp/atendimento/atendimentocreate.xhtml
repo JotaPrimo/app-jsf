@@ -13,20 +13,8 @@
 
 <h:body>
 
-    <p:menubar immediate="true">
+    <ui:include src="/WEB-INF/menu.xhtml"/>
 
-        <f:facet name="options" >
-            <p:graphicImage styleClass="logoMenu" name="/imagens/logo-portal-defensoria.png"/>
-        </f:facet>
-
-        <p:menuitem value="Administração" process="@this" action="/primeirapagina"
-                    rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>
-        <p:menuitem value="Lançamentos" process="@this" action="/lancamentos"/>
-        <p:menuitem value="Alunos" process="@this" action="/aluno/create"/>
-        <p:menuitem value="Assistidos" process="@this" action="/assistido/assistidocreate"/>
-        <p:menuitem value="Trocar usuário" process="@this" action="/index"/>
-
-    </p:menubar>
     <h:outputStylesheet library="css" name="headerStyle.css"/>
     <h1>Cadastro de Atendimentos</h1>
     <br/>
@@ -48,31 +36,112 @@
             <p:inputText value="#{atendimentoBean.atendimento.codigo}" disabled="true"/>
 
             <p:outputLabel value="Assistido: "/>
-            <p:inputText value="#{atendimentoBean.atendimento.assistido}">
-            </p:inputText>
+            <p:autoComplete value="#{atendimentoBean.atendimento.assistido}"
+                            completeMethod="#{atendimentoBean.buscarAssistidos}"
+                            var="assistido"
+                            itemLabel="#{assistido.nome}"
+                            itemValue="#{assistido}"
+                            converter="assistidoConverter"
+                            minQueryLength="3"
+                            forceSelection="true"
+                            placeholder="Digite o nome..."
+                            dropdown="true"
+                            required="true"/>
+
 
             <p:outputLabel value="Data: "/>
             <p:datePicker id="data" pattern="dd/MM/yyyy"
                           placeholder="Selecione uma data"
-                          value="#{atendimentoBean.atendimento.assistido}"/>
+                          value="#{atendimentoBean.atendimento.data}"/>
 
             <p:outputLabel value="Situação: "/>
             <p:selectOneMenu id="situacao" value="#{atendimentoBean.atendimento.situacao}">
                 <f:selectItem itemValue="" itemLabel="[--Selecione--]" noSelectionOption="true"/>
                 <f:selectItems value="#{atendimentoBean.estados()}" var="s"
-                               itemValue="#{s.value}"
-                               itemLabel="#{s.descricao}"/>
+                               itemValue="#{s}"/>
             </p:selectOneMenu>
 
-
+            <p:outputLabel value="Atendente: "/>
+            <p:inputText value="#{atendimentoBean.atendimento.atendente}"/>
 
         </p:panelGrid>
-        <br/>
+    <br/>
 
+        <h:column>
+            <h:outputLabel />
+            <h:panelGroup rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
 
+                <p:commandButton value="Novo" action="#{atendimentoBean.novo()}"
+                                 update="formAtendimentos lista_atendimentos"
+                                 style="background-color: #13aa52;border-color: #13aa52"
+                                 icon="pi pi-plus" id="botaoNovo" title="Novo" />
+
+                <p:commandButton icon="pi pi-save" value="Salvar"
+                                 action="#{atendimentoBean.salvar()}"
+                                 style="margin-left:1cm"
+                                 update="formAtendimentos lista_atendimentos"
+                                 title="Salvar"
+                                 validateClient="true" ajax="false"/>
+
+                <p:commandButton action="#{atendimentoBean.limparFormulario()}"
+                                 value="Limpar" title="Limpar" immediate="true"
+                                 style="background-color: goldenrod;border-color: goldenrod;margin-left:1cm"
+                                 icon="pi pi-refresh" id="botaoLimpar"
+                                 update="formAtendimentos"
+                />
+            </h:panelGroup>
+        </h:column>
     </h:form>
 
 
-</h:body>
+<br/><br/>
 
+
+    <p:dataTable id="lista_atendimentos" widgetVar="lista_atendimentos" value="#{atendimentoBean.atendimentos}" var="l"
+                     rows="10" paginatorPosition="bottom" paginator="true"
+                     emptyMessage="Nenhuma informação a ser exibida." border="3">
+        <f:facet name="header">Lista de Atendimentos</f:facet>
+
+        <p:column sortBy="#{l.codigo}" headerText="#ID">
+            <h:outputLabel value="#{l.codigo}"/>
+        </p:column>
+
+        <p:column sortBy="#{l.assistido}" headerText="Assistido">
+            <h:outputLabel value="#{l.assistido.nome}"/>
+        </p:column>
+
+        <p:column sortBy="#{l.data}" headerText="Data">
+            <h:outputLabel value="#{l.data}"/>
+        </p:column>
+
+        <p:column sortBy="#{l.situacao}" headerText="Situação">
+            <p:badge value="#{l.situacao}" severity="#{l.situacao eq 'AGENDADO' ? 'success' :
+             (l.situacao eq 'FINALIZADO' ? 'info' :
+             (l.situacao eq 'CORRENTE' ? 'warning' : 'default'))}" styleClass="mr-2"/>
+        </p:column>
+
+        <p:column headerText="Atendente">
+            <h:outputLabel value="#{l.atendente}"/>
+        </p:column>
+
+        <p:column>
+            <f:facet name="header">Ações</f:facet>
+
+            <p:commandLink process="@this" title="Editar" update="formAtendimentos lista_atendimentos">
+                <f:setPropertyActionListener value="#{l}" target="#{atendimentoBean.atendimento}"/>
+                <i class="pi pi-pencil"/>
+            </p:commandLink>
+            &nbsp;
+            <p:commandLink title="Remover" action="#{atendimentoBean.remover()}" process="@this"
+                           update="formAtendimentos lista_atendimentos">
+                <f:setPropertyActionListener value="#{l}" target="#{atendimentoBean.atendimento}"/>
+                <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+                           message="Deseja mesmo excluir o atendimento?"/>
+                <i class="pi pi-trash"/>
+            </p:commandLink>
+        </p:column>
+    </p:dataTable>
+
+
+</h:body>
 </html>

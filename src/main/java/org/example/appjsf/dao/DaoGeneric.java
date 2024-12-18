@@ -72,6 +72,7 @@ public class DaoGeneric<E> implements Serializable {
         return resultado;
     }
 
+
     public List<E> getListEntity(Class<E> entidade) {
         EntityManager entityManager = JPAUtil.getEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();

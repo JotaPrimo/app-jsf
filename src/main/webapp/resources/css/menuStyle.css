@@ -1,0 +1,19 @@
+.custom-menubar {
+    display: flex; /* Layout flexível */
+    justify-content: space-between; /* Espaço entre imagem e itens */
+    align-items: start; /* Alinhamento vertical */
+    padding: 0 10px; /* Espaçamento horizontal */
+}
+
+.menu-logo {
+    margin-left: 10px; /* Espaçamento à esquerda */
+
+}
+
+.p-menubar .p-menuitem {
+    margin-right: 10px; /* Espaço entre itens do menu */
+}
+
+.p-menubar .pi {
+    margin-right: 5px; /* Espaço entre ícone e texto */
+}

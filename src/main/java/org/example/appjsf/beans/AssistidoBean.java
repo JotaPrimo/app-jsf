@@ -46,6 +46,7 @@ public class AssistidoBean implements Serializable {
         setAssistidos(assistidos);
     }
 
+
     public String salvar() {
 
         assistidoService.merge(assistido);

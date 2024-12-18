@@ -5,6 +5,7 @@ import org.example.appjsf.entities.Assistido;
 import org.example.appjsf.entities.Atendimento;
 import org.example.appjsf.enuns.EnumAtendimento;
 import org.example.appjsf.enuns.EnumSexo;
+import org.example.appjsf.services.AssistidoService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -29,7 +30,18 @@ public class AtendimentoBean implements Serializable {
 
     private DaoGeneric<Atendimento> daoGeneric = new DaoGeneric<Atendimento>();
 
+    private AssistidoService assistidoService = new AssistidoService();
+
     private String termoPesquisa;
+
+    // Lista temporária para armazenar os assistidos buscados
+    private List<Assistido> assistidosFiltrados;
+
+    public List<Assistido> buscarAssistidos(String query){
+        assistidosFiltrados = assistidoService.pesquisarPorAtributo(Assistido.class, "nome", query);
+        return assistidosFiltrados;
+
+    }
 
     @PostConstruct
     public void carregarAtendimentos() {

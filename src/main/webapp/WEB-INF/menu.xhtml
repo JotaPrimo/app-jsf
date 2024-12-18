@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <!-- Carregar o CSS -->
+    <h:outputStylesheet library="css" name="menuStyle.css" />
+</h:head>
+
+<h:body>
+    <p:menubar styleClass="custom-menubar">
+        <!-- Imagem do lado esquerdo -->
+        <f:facet name="options">
+            <p:commandLink action="/primeirapagina" process="@this" styleClass="menu-logo">
+                <p:graphicImage name="/imagens/logo-portal-defensoria.png" />
+            </p:commandLink>
+        </f:facet>
+
+        <!-- Itens do menu -->
+        <p:menuitem value="Administração" icon="pi pi-fw pi-cog" process="@this" action="/primeirapagina"
+                    rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>
+        <p:menuitem value="Lançamentos" icon="pi pi-fw pi-file" process="@this" action="/lancamentos"/>
+        <p:menuitem value="Alunos" icon="pi pi-fw pi-users" process="@this" action="/aluno/create"/>
+        <p:menuitem value="Assistidos" icon="pi pi-fw pi-user" process="@this" action="/assistido/assistidocreate"/>
+        <p:menuitem value="Trocar usuário" icon="pi pi-fw pi-sign-out" process="@this" action="/index"/>
+    </p:menubar>
+</h:body>
+
+</html>

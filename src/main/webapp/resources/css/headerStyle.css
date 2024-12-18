@@ -9,18 +9,3 @@ h1 {
     background-color: #C0C0C0;
 }
 
-.ui-menubar-options {
-    float: left !important;
-}
-
-.ui-menuitem {
-    float: right !important;
-}
-
-
-
-@media (min-width: 768px) {
-    .button-37 {
-        padding: 10px 30px;
-    }
-}

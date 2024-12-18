@@ -13,7 +13,7 @@
 
 <h:body>
     <h:outputScript library="js" name="closeDialog.js"/>
-    <p:menubar hideDelay="1000" immediate="true">
+    <p:menubar >
 
         <f:facet name="options">
             <p:graphicImage styleClass="logoMenu" name="/imagens/logo-portal-defensoria.png"/>
@@ -95,7 +95,7 @@
                                  action="#{assistidoBean.salvar()}"
                                  style="margin-left:1cm"
                                  update="formAssistidos lista_assistidos"
-                                 title="Salvar" styleClass="button-37"
+                                 title="Salvar"
                                  validateClient="true" ajax="false"/>
 
                 <p:commandButton action="#{assistidoBean.limparFormulario()}"

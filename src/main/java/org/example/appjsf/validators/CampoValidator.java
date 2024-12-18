@@ -53,29 +53,6 @@ public class CampoValidator  implements Validator {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Campo sexo é obrigatório.");
                 throw new ValidatorException(message);
             }
-        } else if ("data".equals(tipoValidacao)) {
-
-            String data =  (String) value;
-            if( data == null || data.isEmpty()){
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Campo data é obrigatório.");
-                throw new ValidatorException(message);
-            }
-        }
-        else if ("situacao".equals(tipoValidacao)) {
-
-            String situacao =  (String) value;
-            if( situacao == null || situacao.isEmpty()){
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Campo situação é obrigatório.");
-                throw new ValidatorException(message);
-            }
-        }
-        else if ("atendente".equals(tipoValidacao)) {
-
-            String atendente =  (String) value;
-            if( atendente == null || atendente.isEmpty()){
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Campo atendente é obrigatório.");
-                throw new ValidatorException(message);
-            }
         }
 
     }
